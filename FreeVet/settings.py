@@ -14,11 +14,13 @@ from pathlib import Path
 from decouple import config
 from django.urls import reverse_lazy
 import os
+from environ import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+env = Env()
+Env.read_env(BASE_DIR / '.env')
 
 BASE_URL = 'https://localhost:8000' #Base URL
 
@@ -30,12 +32,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG', default=True)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 
 # Application definition
@@ -146,17 +148,18 @@ WSGI_APPLICATION = 'FreeVet.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
     }
-}
 
+# Настройки Twilio (или Plivo)
+TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN')
+TWILIO_NUMBER = env('TWILIO_NUMBER')
 
-# # Настройки Twilio (или Plivo)
-# TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
-# TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
-#
+# #
 # # Настройки Stripe
 # STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 # STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
