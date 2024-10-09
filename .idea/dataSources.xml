@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="db" uuid="ed8452d0-75ac-469f-b78f-be5c56c10536">
+    <data-source source="LOCAL" name="db" uuid="ea3f0acc-d202-4cd0-90ba-fdfd89dae5c4">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\kruts\OneDrive\Desktop\PythonProject\FreeVet-backend\FreeVetbackend\db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\kruts\OneDrive\Рабочий стол\PythonProject\FreeVet-backend\FreeVetbackend\db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

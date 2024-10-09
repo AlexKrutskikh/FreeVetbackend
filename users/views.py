@@ -1,14 +1,13 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import Profile
-from .serializers import RegisterSerializer, LoginSerializer, SMSVerificationSerializer
 from .utils import send_sms
 from django.utils import timezone
 from datetime import timedelta
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
 
 
 
@@ -31,13 +30,34 @@ def facebook_oauth_redirect(request):
 
 """Authorization via Twilio"""
 
-class RegisterView(generics.CreateAPIView):
-    serializer_class = RegisterSerializer
+class RegisterView(APIView):
+    @csrf_exempt
+    def post(self, request, *args, **kwargs):
+        # Получение данных из FormData
+        name = request.data.get('name')
+        phone = request.data.get('phone')
+        image = request.FILES.get('image')  # Изображение (если передано)
 
-    def perform_create(self, serializer):
-        profile = Profile.objects.create(phone=serializer.validated_data['phone'])
-        profile.generate_sms_code()  # Генерация кода
-        send_sms(profile.phone, f"Your code is {profile.sms_code}")
+        # Проверка на наличие обязательных полей
+        if not phone:
+            return JsonResponse({'error': 'Телефон обязателен'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Создание профиля
+        profile = Profile.objects.create(
+            name=name,
+            phone=phone,
+            image=image  # Сохраняем изображение, если оно передано
+        )
+
+        # Генерация SMS-кода и отправка его через Twilio
+        profile.generate_sms_code()
+        send_sms(profile.phone, f"Ваш код: {profile.sms_code}")
+
+        # Сохранение профиля в базу данных
+        profile.save()
+
+        # Возврат успешного ответа
+        return JsonResponse({'message': 'Профиль создан успешно. SMS-код отправлен на телефон.'}, status=status.HTTP_201_CREATED)
 
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer

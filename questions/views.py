@@ -6,6 +6,7 @@ from .models import Question,QuestionFile
 
 @csrf_exempt  # Для упрощения, но лучше использовать токены CSRF
 def add_question(request):
+
     if request.method == 'POST':
         question_text = request.POST.get('question')
         pet_art = request.POST.get('petArt')

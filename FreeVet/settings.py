@@ -99,7 +99,6 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 
-
 """End social-auth"""
 
 
