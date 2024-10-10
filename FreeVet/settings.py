@@ -33,12 +33,12 @@ CORS_ALLOWED_ORIGINS = [
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY='django-insecure-&c3ya6hwau4#alnc*8@js#atg#+#$r#&h)3f1^#e2^^w_tf5_^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', default=True)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS=['127.0.0.1','localhost']
 
 # Application definition
 
@@ -139,17 +139,17 @@ WSGI_APPLICATION = 'FreeVet.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
+        'NAME': "freevetDB",
+        'USER': 'freevet',
+        'PASSWORD': 'Str0ngPassw@rd!',
+        'HOST': '38.180.108.211',
+        'PORT': '3306',
     },
 }
 
 # Настройки Twilio (или Plivo)
-TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID')
-TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN')
+TWILIO_ACCOUNT_SID='AC08e69767676a74cf5f8bf68303e0eee9'
+TWILIO_AUTH_TOKEN='65c5b52b351b5e7f7dc67714fb386e2d'
 TWILIO_NUMBER = '+12513337680'
 
 # Password validation
