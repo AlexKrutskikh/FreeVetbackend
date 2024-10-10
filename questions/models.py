@@ -9,11 +9,13 @@ class Question(models.Model):
     pet_weight = models.CharField(max_length=100)
     pet_gender = models.CharField(max_length=50)
     is_homeless = models.BooleanField()
-    files = models.FileField(upload_to='questions_files/', blank=True, null=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.question
+
+class QuestionFile(models.Model):
+    question = models.ForeignKey(Question, related_name='files', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='questions_files/')
 
 
