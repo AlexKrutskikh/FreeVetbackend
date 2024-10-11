@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = Env()
 Env.read_env(BASE_DIR / '.env')
 
-BASE_URL = 'https://freevet.ru'  # Base URL
+BASE_URL = 'https://freevetback.ru'  # Base URL
 
 CORS_ALLOW_ALL_ORIGINS = True
 
