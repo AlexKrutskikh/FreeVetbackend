@@ -27,7 +27,7 @@ BASE_URL = 'https://freevet.ru'  # Base URL
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173"  # Разрешаем запросы с вашего клиентского домена
+    "https://freevet.ru"  # Разрешаем запросы с вашего клиентского домена
 ]
 
 # Quick-start development settings - unsuitable for production
@@ -39,7 +39,7 @@ SECRET_KEY='django-insecure-&c3ya6hwau4#alnc*8@js#atg#+#$r#&h)3f1^#e2^^w_tf5_^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', default=True)
 
-ALLOWED_HOSTS=['127.0.0.1','localhost','freevet.ru','freevet.app']
+ALLOWED_HOSTS=['127.0.0.1','localhost','freevetback.ru']
 
 # Application definition
 
