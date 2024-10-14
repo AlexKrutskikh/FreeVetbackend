@@ -5,9 +5,11 @@ from .views import (
     custom_login_redirect,
     question_post,
     google_oauth_redirect,
-    facebook_oauth_redirect
+    facebook_oauth_redirect,
+    RegisterView,
+    # LoginView,VerifyCodeView
 )
-from .views import RegisterView, LoginView, VerifyCodeView
+
 
 
 urlpatterns = [
@@ -23,9 +25,9 @@ urlpatterns = [
 
     path('register/', RegisterView.as_view(), name='register'), #Authorization via Twilio
 
-    path('login/', LoginView.as_view(), name='login'), #Authorization via Twilio
-
-    path('verify/', VerifyCodeView.as_view(), name='verify_code'), #Authorization via Twilio
+    # path('login/', LoginView.as_view(), name='login'), #Authorization via Twilio
+    #
+    # path('verify/', VerifyCodeView.as_view(), name='verify_code'), #Authorization via Twilio
 
 
 

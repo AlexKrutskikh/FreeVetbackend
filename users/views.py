@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.http import JsonResponse
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Profile
 from .utils import send_sms
@@ -8,6 +9,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
+from django.shortcuts import render
 
 
 
@@ -59,42 +61,42 @@ class RegisterView(APIView):
         # Возврат успешного ответа
         return JsonResponse({'message': 'Профиль создан успешно. SMS-код отправлен на телефон.'}, status=status.HTTP_201_CREATED)
 
-class LoginView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        phone_number = serializer.validated_data['phone_number']
-
-        try:
-            profile = Profile.objects.get(phone=phone_number)
-            profile.generate_sms_code()
-            send_sms(phone_number, f"Your code is {profile.sms_code}")
-            return Response({"message": "Code sent"}, status=status.HTTP_200_OK)
-        except Profile.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-
-class VerifyCodeView(generics.GenericAPIView):
-    serializer_class = SMSVerificationSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        phone_number = serializer.validated_data['phone_number']
-        code = serializer.validated_data['code']
-
-        try:
-            profile = Profile.objects.get(phone=phone_number, sms_code=code)
-            if profile.code_sent_time < timezone.now() - timedelta(seconds=90):
-                return Response({"error": "Code expired"}, status=status.HTTP_400_BAD_REQUEST)
-
-            profile.last_login_time = timezone.now()
-            profile.save()
-            return Response({"message": "Logged in"}, status=status.HTTP_200_OK)
-        except Profile.DoesNotExist:
-            return Response({"error": "Invalid code"}, status=status.HTTP_400_BAD_REQUEST)
+# class LoginView(generics.GenericAPIView):
+#     serializer_class = LoginSerializer
+#
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         phone_number = serializer.validated_data['phone_number']
+#
+#         try:
+#             profile = Profile.objects.get(phone=phone_number)
+#             profile.generate_sms_code()
+#             send_sms(phone_number, f"Your code is {profile.sms_code}")
+#             return Response({"message": "Code sent"}, status=status.HTTP_200_OK)
+#         except Profile.DoesNotExist:
+#             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+#
+#
+# class VerifyCodeView(generics.GenericAPIView):
+#     serializer_class = SMSVerificationSerializer
+#
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         phone_number = serializer.validated_data['phone_number']
+#         code = serializer.validated_data['code']
+#
+#         try:
+#             profile = Profile.objects.get(phone=phone_number, sms_code=code)
+#             if profile.code_sent_time < timezone.now() - timedelta(seconds=90):
+#                 return Response({"error": "Code expired"}, status=status.HTTP_400_BAD_REQUEST)
+#
+#             profile.last_login_time = timezone.now()
+#             profile.save()
+#             return Response({"message": "Logged in"}, status=status.HTTP_200_OK)
+#         except Profile.DoesNotExist:
+#             return Response({"error": "Invalid code"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
