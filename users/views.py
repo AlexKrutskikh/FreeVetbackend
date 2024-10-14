@@ -21,7 +21,7 @@ def custom_login_redirect(request):
 """Redirect for creating an API for authorization"""
 
 def google_oauth_redirect(request):
-    redirect_url = f"{settings.BASE_URL}/users/social-auth/login/google-oauth2/"
+    redirect_url = "https://127.0.0.1:8000/users/social-auth/login/google-oauth2/"
     return HttpResponseRedirect(redirect_url)
 
 def facebook_oauth_redirect(request):

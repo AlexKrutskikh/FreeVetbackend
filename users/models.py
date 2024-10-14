@@ -18,10 +18,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=30, blank=True, null=True)                  # Фамилия
     phone = models.CharField(max_length=50, unique=True)                                # Номер телефона
     email = models.EmailField(unique=True, blank=True, null=True)                       # Почта
-
-
-
-    sms_code = models.CharField(max_length=6, blank=True, null=True)
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
     code_sent_time = models.DateTimeField(blank=True, null=True)
 
     def generate_sms_code(self):
