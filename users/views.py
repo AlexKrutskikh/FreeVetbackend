@@ -5,11 +5,13 @@ from django.http import HttpResponseRedirect
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import Profile
-from .serializers import RegisterSerializer, LoginSerializer, SMSVerificationSerializer
+from .serializers import LoginSerializer, SMSVerificationSerializer, RegisterSerializer
 from .utils import send_sms
 from django.utils import timezone
 from datetime import timedelta
-import random
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from rest_framework.generics import CreateAPIView
 
 
 """Redirect after registration and authorization"""
@@ -46,16 +48,24 @@ def question_post(request):
     return render(request, 'question.html')
 
 
-class RegisterView(generics.CreateAPIView):
-    serializer_class = RegisterSerializer
+class RegisterView(CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        serializer = RegisterSerializer(data=request.data)
 
+        # Проверяем валидность входящих данных
+        if serializer.is_valid():
+            photo = request.FILES.get('photo', None)
+            profile = Profile.objects.create(
+                name=serializer.validated_data['name'],
+                phone=serializer.validated_data['phone'],
+                photo=photo  # Устанавливаем фото, если оно передано
+            )
+            profile.generate_sms_code()  # Генерация кода
+            send_sms(profile.phone, f"Your code is {profile.sms_code}")
 
-
-    def perform_create(self, serializer):
-        profile = Profile.objects.create(phone=serializer.validated_data['phone'])
-        profile.generate_sms_code()  # Генерация кода
-        send_sms(profile.phone, f"Your code is {profile.sms_code}")
-
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

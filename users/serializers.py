@@ -4,20 +4,11 @@ from .models import Profile
 
 class RegisterSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(max_length=20)
+    photo = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Profile
-        fields = ['name', 'phone']
-
-    def create(self, validated_data):
-        # Создаем пользователя
-        # username можно задать как номер телефона
-        # Создаем профиль и связываем его с пользователем
-        profile = Profile.objects.create(
-            name=validated_data['name'],
-            phone=validated_data['phone']
-        )
-        return profile
+        fields = ['name', 'phone', 'photo']
 
 
 class SMSVerificationSerializer(serializers.Serializer):

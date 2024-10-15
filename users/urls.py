@@ -1,4 +1,4 @@
-from django.urls import path,include
+from django.urls import path, include
 from .views import (
     some_view,
     registration_success,
@@ -8,6 +8,8 @@ from .views import (
     facebook_oauth_redirect
 )
 from .views import RegisterView, LoginView, VerifyCodeView
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
@@ -29,4 +31,4 @@ urlpatterns = [
 
     path('index', some_view, name='some_view'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

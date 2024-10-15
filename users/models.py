@@ -8,7 +8,7 @@ import random
 
 
 class Profile(models.Model):
-
+    photo = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     auth_provider = models.CharField(max_length=50, default='Twilio')                   # Социальная сеть
     name = models.CharField(max_length=50)                                              # Имя
     registration_time = models.DateTimeField(auto_now_add=True)                         # Время регистрации

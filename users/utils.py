@@ -8,7 +8,7 @@ def send_sms(phone, verification_code):
     message = client.messages.create(
         body=f'Your verification code is: {verification_code}',
         from_=settings.TWILIO_NUMBER,
-        to=str(phone)
+        to=phone
     )
 
     return message.sid
