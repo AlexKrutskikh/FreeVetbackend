@@ -1,16 +1,18 @@
-from django.urls import path,include
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
-    some_view,
-    registration_success,
     custom_login_redirect,
-    question_post,
     google_oauth_redirect,
     facebook_oauth_redirect
 )
 from .views import RegisterView, LoginView, VerifyCodeView
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
+
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     path('social-auth/',
          include('social_django.urls', namespace='social')), #social-auth
@@ -21,17 +23,11 @@ urlpatterns = [
 
     path('login/facebook/', facebook_oauth_redirect, name='facebook-login-shortcut'), #Short API for authorization facebook
 
-    path('register/', RegisterView.as_view(), name='register'), #Authorization via Twilio
+    path('register/', RegisterView.as_view(), name='register'),
 
-    path('login/', LoginView.as_view(), name='login'), #Authorization via Twilio
+    path('login/', LoginView.as_view(), name='login'),
 
-    path('verify/', VerifyCodeView.as_view(), name='verify_code'), #Authorization via Twilio
-
-
+    path('verify/', VerifyCodeView.as_view(), name='verify_code'),
 
 
-#The paths below are created for testing; they will be removed later
-
-    path('index', some_view, name='some_view'),
-
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

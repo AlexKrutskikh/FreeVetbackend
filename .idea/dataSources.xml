@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="freevetDB" uuid="48a22fc0-bf6d-4bf3-927f-f20e2ef4ee45">
+    <data-source source="LOCAL" name="freevet" uuid="6df7ffeb-fc12-4d45-a8cd-82ee94e65b7c">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
