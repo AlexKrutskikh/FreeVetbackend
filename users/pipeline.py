@@ -32,6 +32,7 @@ def save_profile(backend, user, response, *args, **kwargs):
 
 
     if created:
-        kwargs['request'].session['redirect_url'] = f'https://freevet.ru/verification/role?user_id={user.id}'
+
+        kwargs['request'].session['redirect_url'] = f'https://free-vet-app.vercel.app/verification/role?user_id={user.id}'
     else:
-        kwargs['request'].session['redirect_url'] = f'https://freevet.ru/main?user_id={user.id}'
+        kwargs['request'].session['redirect_url'] = f'https://free-vet-app.vercel.app/main?user_id={user.id}'
