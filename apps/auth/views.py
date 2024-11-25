@@ -2,7 +2,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -15,7 +15,8 @@ from django.shortcuts import render
 
 from apps.profiles.models import Profile
 from apps.profiles.serializers import ProfileViewSerializer
-from apps.users.serializers import LoginSerializer
+from apps.auth.serializers import LoginSerializer
+from apps.verification_codes.models import SmsCode
 from apps.verification_codes.serializers import SMSVerificationSerializer
 from apps.verification_codes.utils import send_sms
 
@@ -44,55 +45,18 @@ def facebook_oauth_redirect(request):
     redirect_url = f"{settings.BASE_URL}/api/users/social-auth/login/facebook/"
     return HttpResponseRedirect(redirect_url)
 
-
-
-
 """Authorization via Twilio"""
 
-class RegisterView(CreateAPIView):
+class SendSmsCode(CreateAPIView):
     def post(self, request, *args, **kwargs):
-        # Получаем данные из формы
-        name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        photo = request.FILES.get('photo', None)
+        code = SmsCode.objects.get(phone=request.data['phone'])
+        if code and code.code_sent_time > timezone.now() - timedelta(seconds=60):
+            return JsonResponse({"error_text": "too many attempts"}, 400)
 
-        # Проверка, переданы ли необходимые данные
-        if not name or not phone:
-            return Response(
-                {"detail": "Необходимо указать имя и номер телефона."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Проверка, существует ли пользователь с данным номером телефона
-        if Profile.objects.filter(phone=phone).exists():
-            return Response(
-                {"detail": "Пользователь уже зарегистрирован. Перейдите в окно входа."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Создаем новый профиль
-        profile = Profile.objects.create(
-            name=name,
-            phone=phone,
-            photo=photo  # Устанавливаем фото, если оно передано
-        )
-        
-        # Генерируем и отправляем SMS-код
-        profile.generate_sms_code()
-        
-        try:
-            send_sms(profile.phone, f"Ваш код: {profile.sms_code}")
-        except TwilioRestException:
-            # Удаляем профиль, если SMS не может быть отправлено
-            profile.delete()
-            return Response(
-                {"detail": "С текущими номерами отправителя и получателя SMS не может быть отправлено."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        SmsCode.objects.create(phone=request.data['phone'], code=request.data['code'])
 
-        # Возвращаем ответ об успешной регистрации
         return Response(
-            {"detail": "Регистрация прошла успешно."},
+            {"detail": "Код отправлен."},
             status=status.HTTP_201_CREATED
         )
 
@@ -128,10 +92,10 @@ class VerifyCodeView(generics.GenericAPIView):
         code = serializer.validated_data['code']
 
         try:
-            profile = Profile.objects.get(phone=phone_number, sms_code=code)
+            code = SmsCode.objects.get(phone=phone_number)
 
             # Проверка срока действия кода
-            if profile.code_sent_time < timezone.now() - timedelta(seconds=90):
+            if code.code_sent_time < timezone.now() - timedelta(seconds=60):
                 return Response({"error": "Code expired"}, status=status.HTTP_400_BAD_REQUEST)
 
             profile.last_login_time = timezone.now()

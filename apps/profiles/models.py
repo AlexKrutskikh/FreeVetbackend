@@ -1,14 +1,14 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.users.models import User
+from apps.auth.models import User
 
 
 class Profile(models.Model):
 
     class Perks(models.TextChoices):
         HOMELESS_HELPER = 'PH', _('Homeless Helper')
-        PETS_HELPER = 'HH', _('Pers Helper')
+        PETS_HELPER = 'HH', _('Pets Helper')
         VOLUNTEER = 'VR', _('Volunteer')
         SHELTER_WORKER = 'SW', _('Shelter Worker')
         PET_OWNER = 'PO', _('Pet Owner')

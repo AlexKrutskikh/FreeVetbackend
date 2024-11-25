@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',  # Token Authentication
     'modeltranslation',
 
-    'apps.users',
+    'apps.auth',
     'apps.vetbooks',
     'apps.questions',
     'apps.verification_codes',
@@ -70,7 +70,7 @@ INSTALLED_APPS = [
 
 ]
 
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "auth.User"
 
 """social-auth"""
 
@@ -97,7 +97,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.user.create_user',
-    'users.pipeline.save_profile',  # Custom pipeline for creating a profile
+    'auth.pipeline.save_profile',  # Custom pipeline for creating a profile
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
 )

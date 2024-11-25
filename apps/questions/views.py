@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.models import Permission
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status

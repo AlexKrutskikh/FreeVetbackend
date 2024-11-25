@@ -10,14 +10,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         CLIENT = 'CL', _('Client')
         SPECIALIST = 'SP', _('Specialist')
 
-    auth_provider = models.CharField(max_length=50, default='Twilio')                   # Социальная сеть
+    class RegistrationType(models.TextChoices):
+        TWILIO = 'TW', _('Twilio')
+        SOCIAL = 'SC', _('Social')
+
+    auth_provider = models.CharField(                                                   # Тип пользователя
+        max_length=20,
+        choices=RegistrationType.choices,
+        default=RegistrationType.SOCIAL,
+    )
+
     registration_time = models.DateTimeField(auto_now_add=True)                         # Время регистрации
     last_login_time = models.DateTimeField(auto_now=True)                               # Время последнего входа
     email = models.EmailField(unique=True, blank=True, null=True)                       # Почта
     USERNAME_FIELD = "email"
 
     type = models.CharField(                                                            # Тип пользователя
-        max_length=2,
+        max_length=20,
         choices=UserType.choices,
         default=UserType.CLIENT,
     )
