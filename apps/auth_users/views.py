@@ -15,8 +15,10 @@ from apps.profiles.serializers import ProfileViewSerializer
 from apps.auth_users.serializers import LoginSerializer
 from apps.verification_codes.serializers import SMSVerificationSerializer
 from apps.verification_codes.utils import send_sms
+from django.shortcuts import render
 
-
+def updatecode_view(request):
+    return render(request, 'updatecode.html')
 
 """API для авторизации и регистрации через социальные сети"""
 

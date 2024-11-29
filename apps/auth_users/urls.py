@@ -4,7 +4,7 @@ from .views import (
     google_oauth_redirect,
     facebook_oauth_redirect, ProfileView
 )
-from .views import RegisterView, LoginView, VerifyCodeView
+from .views import RegisterView, LoginView, VerifyCodeView, updatecode_view
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -31,6 +31,6 @@ urlpatterns = [
 
     path('profile/<pk>', ProfileView.as_view(), name='profile'),
 
-
+    path('1', updatecode_view, name='1'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

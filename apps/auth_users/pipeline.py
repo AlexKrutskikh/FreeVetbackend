@@ -40,7 +40,8 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
         existing_user.last_login = datetime.now()
         existing_user.save()
 
-        return generate_token_and_redirect(strategy, existing_user, redirect_url = f"{settings.BASE_URL}/main/")
+    #   return generate_token_and_redirect(strategy, existing_user, redirect_url = f"{settings.BASE_URL}/main/")
+        return generate_token_and_redirect(strategy, existing_user, redirect_url=f"https://127.0.0.1:8000/api/auth_users/1")
 
 
     uid = kwargs.get('uid') or kwargs.get('response', {}).get('sub')
@@ -62,5 +63,6 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
     user = User(**fields)
     user.save()
 
-    return generate_token_and_redirect(strategy, user, redirect_url=f"{settings.BASE_URL}/verification/role/")
+   # return generate_token_and_redirect(strategy, user, redirect_url=f"{settings.BASE_URL}/verification/role/")
+    return generate_token_and_redirect(strategy, user, redirect_url=f"http://localhost:5173/verification/role/")
 
