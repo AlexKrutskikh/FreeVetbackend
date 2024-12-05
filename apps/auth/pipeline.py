@@ -48,6 +48,7 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
         raise AuthException("UID is missing.")
 
     provider = backend.name
+    #нужно исправить повторение кода.
 
     if provider == 'google-oauth2':
 
