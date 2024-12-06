@@ -17,7 +17,7 @@ urlpatterns = [
     path('social-auth/',
          include('social_django.urls', namespace='social')),                          # api библиотеки social-auth-app-django
 
-    path('login/google/', google_oauth_redirect, name='google-login-shortcut'),       # регистрация и авторизация google
+    path('v1/authentication/google/', google_oauth_redirect, name='google-login-shortcut'),       # регистрация и авторизация google
 
     path('login/facebook/', facebook_oauth_redirect, name='facebook-login-shortcut'), # регистрация и авторизация google facebook
 
